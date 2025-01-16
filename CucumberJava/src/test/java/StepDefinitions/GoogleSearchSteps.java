@@ -1,38 +1,35 @@
 package StepDefinitions;
 
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.en.*;
 
 public class GoogleSearchSteps {
 
 	WebDriver driver = null;
 
-	@Given("browser window is open")
-	public void browser_is_open() {
-		
-		System.out.println("Inside Step - browser is open");
-		
+	@Before
+	public void setUp(){
 		String projectPath = System.getProperty("user.dir");
-		System.out.println("Project path is : "+projectPath);
-		
-		System.setProperty("webdriver.chrome.driver", projectPath+"/src/test/resources/drivers/chromedriver.exe");
-		
-		driver = new ChromeDriver();
-		
+		File file = new File(projectPath+"/src/test/resources/drivers/msedgedriver.exe");
+		String edgeLocation = file.getAbsolutePath();
+		System.setProperty("webdriver.edge.driver",edgeLocation );
+		System.setProperty("webdriver.http.factory", "jdk-http-client");
+		driver = new EdgeDriver();
+		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
-		driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
-		
-		//driver.manage().window().maximize();
-		
+		driver.manage().window().maximize();
 	}
 
-	@And("user is on google search page")
+	@Given("user is on google search page")
 	public void user_is_on_google_search_page() {
 		
 		System.out.println("Inside Step - user is on goolge search page");
